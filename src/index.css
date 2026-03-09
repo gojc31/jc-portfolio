@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@theme {
+  --font-outfit: "Outfit", sans-serif;
+  --font-space: "Space Grotesk", monospace;
+
+  --color-dark-950: #09090B;
+  --color-dark-900: #111113;
+  --color-dark-800: #18181B;
+  --color-dark-700: #27272A;
+  --color-dark-600: #3F3F46;
+  --color-dark-400: #71717A;
+  --color-dark-300: #A1A1AA;
+  --color-dark-100: #E4E4E7;
+  --color-dark-50: #FAFAFA;
+
+  --color-accent-500: #D4A03C;
+  --color-accent-400: #E4B44E;
+  --color-accent-300: #F0CC7A;
+
+  --color-glow: rgba(255, 255, 255, 0.06);
+  --color-glow-border: rgba(255, 255, 255, 0.1);
+
+  --accent-rgb: 212, 160, 60;
+}
+
+/* Premium monochrome theme */
+[data-theme="grey"] {
+  --color-accent-500: #C0C0C8;
+  --color-accent-400: #D8D8E0;
+  --color-accent-300: #ECECF0;
+
+  --accent-rgb: 192, 192, 200;
+}
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: #09090B;
+    color: #FAFAFA;
+  }
+
+  body {
+    font-family: "Outfit", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-accent-500) 20%, transparent);
+    color: #fff;
+  }
+
+  @media (pointer: fine) {
+    *, *::before, *::after {
+      cursor: none !important;
+    }
+  }
+}
+
+/* Noise overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #09090B;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272A;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3F3F46;
+}
