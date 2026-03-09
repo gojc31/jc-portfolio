@@ -1,20 +1,28 @@
 import { useEffect, useRef } from "react";
 
-interface Particle {
+interface Node {
   x: number;
   y: number;
   vx: number;
   vy: number;
-  life: number;
-  maxLife: number;
   size: number;
+  pulse: number;
+  pulseSpeed: number;
 }
+
+function getAccentRGB(): string {
+  const raw = getComputedStyle(document.documentElement)
+    .getPropertyValue("--accent-rgb")
+    .trim();
+  return raw || "139,92,246";
+}
+
+const NODE_COUNT = 40;
+const CONNECTION_DIST = 150;
 
 export default function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const particles = useRef<Particle[]>([]);
   const animId = useRef(0);
-  const isActive = useRef(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -22,85 +30,127 @@ export default function ParticleCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    let w = 0, h = 0;
+    const nodes: Node[] = [];
+    let mouse = { x: -1000, y: -1000 };
+    let colorRGB = getAccentRGB();
+    let frameCount = 0;
+
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
     };
     resize();
-    window.addEventListener("resize", resize, { passive: true });
 
-    let lastSpawn = 0;
-    let idleTimeout: ReturnType<typeof setTimeout>;
-
-    const startLoop = () => {
-      if (isActive.current) return;
-      isActive.current = true;
-      animate();
-    };
+    // Initialize nodes
+    for (let i = 0; i < NODE_COUNT; i++) {
+      nodes.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        size: 1 + Math.random() * 1.5,
+        pulse: Math.random() * Math.PI * 2,
+        pulseSpeed: 0.01 + Math.random() * 0.02,
+      });
+    }
 
     const onMove = (e: MouseEvent) => {
-      const now = Date.now();
-      if (now - lastSpawn > 50 && particles.current.length < 12) {
-        lastSpawn = now;
-        particles.current.push({
-          x: e.clientX,
-          y: e.clientY,
-          vx: (Math.random() - 0.5) * 1,
-          vy: (Math.random() - 0.5) * 1 + 0.3,
-          life: 0,
-          maxLife: 35 + Math.random() * 20,
-          size: 1.5 + Math.random() * 1,
-        });
-      }
-      startLoop();
-      clearTimeout(idleTimeout);
-      idleTimeout = setTimeout(() => {
-        // Will stop naturally when particles die out
-      }, 2000);
+      mouse = { x: e.clientX, y: e.clientY };
     };
+
+    window.addEventListener("resize", resize, { passive: true });
     window.addEventListener("mousemove", onMove, { passive: true });
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, w, h);
+      frameCount++;
+      if (frameCount % 120 === 0) colorRGB = getAccentRGB();
 
-      particles.current = particles.current.filter((p) => {
-        p.life++;
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.015;
+      // Update and draw nodes
+      for (const node of nodes) {
+        node.x += node.vx;
+        node.y += node.vy;
+        node.pulse += node.pulseSpeed;
 
-        const progress = p.life / p.maxLife;
-        const alpha = 1 - progress;
+        // Wrap around edges
+        if (node.x < -10) node.x = w + 10;
+        if (node.x > w + 10) node.x = -10;
+        if (node.y < -10) node.y = h + 10;
+        if (node.y > h + 10) node.y = -10;
 
+        // Subtle mouse repulsion
+        const dx = node.x - mouse.x;
+        const dy = node.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120 && dist > 0) {
+          const force = (120 - dist) / 120 * 0.15;
+          node.vx += (dx / dist) * force;
+          node.vy += (dy / dist) * force;
+        }
+
+        // Dampen velocity
+        node.vx *= 0.99;
+        node.vy *= 0.99;
+
+        // Draw node
+        const alpha = 0.15 + Math.sin(node.pulse) * 0.08;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * (1 - progress * 0.5), 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.35})`;
+        ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${colorRGB},${alpha})`;
         ctx.fill();
-
-        return p.life < p.maxLife;
-      });
-
-      if (particles.current.length > 0) {
-        animId.current = requestAnimationFrame(animate);
-      } else {
-        isActive.current = false;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
+
+      // Draw connections
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < CONNECTION_DIST) {
+            const alpha = (1 - dist / CONNECTION_DIST) * 0.06;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.strokeStyle = `rgba(${colorRGB},${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+
+        // Also connect to mouse if close
+        const mdx = nodes[i].x - mouse.x;
+        const mdy = nodes[i].y - mouse.y;
+        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+        if (mdist < 180) {
+          const alpha = (1 - mdist / 180) * 0.12;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `rgba(${colorRGB},${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+
+      animId.current = requestAnimationFrame(animate);
     };
+
+    animId.current = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMove);
       cancelAnimationFrame(animId.current);
-      clearTimeout(idleTimeout);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-50"
-      style={{ mixBlendMode: "screen" }}
+      className="pointer-events-none fixed inset-0 z-0"
+      style={{ opacity: 0.6 }}
     />
   );
 }
