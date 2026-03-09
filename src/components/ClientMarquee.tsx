@@ -2,12 +2,12 @@ import { motion } from "framer-motion";
 import ToolLogo from "./ToolLogo";
 
 const clients = [
-  { name: "E-Commerce Co.", result: "82% faster response" },
-  { name: "TechVentures Inc.", result: "14h/week saved" },
-  { name: "Real Estate AI", result: "3.2x conversions" },
-  { name: "HealthClinic Net", result: "95% accuracy" },
-  { name: "ShopFlow", result: "80% tickets automated" },
-  { name: "DataPulse Analytics", result: "60% faster resolution" },
+  { name: "Pure Tropix", result: "CRM fully automated" },
+  { name: "10xDigital Solutions", result: "RevOps pipeline unified" },
+  { name: "ODA Skool LLC", result: "AI coaching workflows" },
+  { name: "Priority Haulage", result: "Fleet ops automated" },
+  { name: "Merkeley Ventures", result: "AI chatbot deployed" },
+  { name: "Booking.com", result: "30% less manual tracking" },
 ];
 
 const toolLogos = [

@@ -6,7 +6,7 @@ import {
   useMotionValue,
   useSpring,
 } from "framer-motion";
-import { ExternalLink, X, ArrowRight } from "lucide-react";
+import { ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
 import TextReveal from "./TextReveal";
 
 /* ─── Data types ──────────────────────────────────────────────── */
@@ -302,23 +302,44 @@ const projects: Project[] = [
   },
 ];
 
-/* ─── Tool-based filter map ──────────────────────────────────── */
+/* ─── Folder categories ──────────────────────────────────────── */
 
-const toolFilters: { label: string; match: (p: Project) => boolean }[] = [
-  { label: "All", match: () => true },
-  { label: "n8n", match: (p) => p.tools.some((t) => t.toLowerCase() === "n8n") },
-  { label: "GHL", match: (p) => p.tools.some((t) => t.toLowerCase().includes("gohighlevel")) },
-  { label: "Make.com", match: (p) => p.tools.some((t) => t.toLowerCase() === "make") },
-  { label: "Zapier", match: (p) => p.tools.some((t) => t.toLowerCase() === "zapier") },
-  { label: "Apps Script", match: (p) => p.tools.some((t) => t.toLowerCase().includes("apps script")) },
-];
-
-const filterLabels = toolFilters.map((f) => f.label);
-
-function matchesFilter(filterLabel: string, project: Project): boolean {
-  const f = toolFilters.find((tf) => tf.label === filterLabel);
-  return f ? f.match(project) : true;
+interface FolderGroup {
+  name: string;
+  icon: string;
+  projects: Project[];
 }
+
+const folders: FolderGroup[] = [
+  {
+    name: "AI & Agents",
+    icon: "01",
+    projects: projects.filter((p) =>
+      ["Voice AI", "AI Agent", "Content Gen"].includes(p.category)
+    ),
+  },
+  {
+    name: "Sales & CRM",
+    icon: "02",
+    projects: projects.filter((p) =>
+      ["Sales Automation", "Lead Gen", "Sales Ops"].includes(p.category)
+    ),
+  },
+  {
+    name: "Operations",
+    icon: "03",
+    projects: projects.filter((p) =>
+      ["FinOps", "Support Ops", "Real Estate", "Compliance"].includes(p.category)
+    ),
+  },
+  {
+    name: "Marketing",
+    icon: "04",
+    projects: projects.filter((p) =>
+      ["Social Commerce", "Content Ops"].includes(p.category)
+    ),
+  },
+];
 
 /* ─── Modal counter (spring-animated number) ──────────────────── */
 
@@ -839,133 +860,329 @@ function LightboxModal({
   );
 }
 
-/* ─── Project Card (pure CSS transitions for snap feel) ───────── */
+/* ─── Folder Tab Selector ─────────────────────────────────────── */
+
+function FolderTab({
+  folder,
+  index,
+  isSelected,
+  onClick,
+}: {
+  folder: FolderGroup;
+  index: number;
+  isSelected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <motion.button
+      onClick={onClick}
+      className="group/tab relative cursor-pointer flex-shrink-0"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.08, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
+      <div className="relative" style={{ width: 180, height: 130 }}>
+        {/* Stacked paper layers behind folder */}
+        <div
+          className={`absolute bottom-0 rounded-[3px] transition-all duration-500 ${
+            isSelected
+              ? "opacity-40"
+              : "opacity-0 group-hover/tab:opacity-20"
+          }`}
+          style={{
+            left: 8,
+            right: 8,
+            height: 88,
+            background: "linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
+            border: "1px solid rgba(255,255,255,0.04)",
+            transform: "translateY(-4px)",
+          }}
+        />
+        <div
+          className={`absolute bottom-0 rounded-[3px] transition-all duration-500 ${
+            isSelected
+              ? "opacity-30"
+              : "opacity-0 group-hover/tab:opacity-15"
+          }`}
+          style={{
+            left: 14,
+            right: 14,
+            height: 84,
+            background: "linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.005) 100%)",
+            border: "1px solid rgba(255,255,255,0.03)",
+            transform: "translateY(-8px)",
+          }}
+        />
+
+        {/* Main folder body */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 overflow-hidden rounded-[4px]"
+          style={{ height: 94 }}
+          animate={{
+            y: isSelected ? -2 : 0,
+          }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          {/* Folder surface */}
+          <div
+            className={`absolute inset-0 transition-all duration-400 ${
+              isSelected
+                ? "bg-[linear-gradient(160deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0.03)_50%,rgba(255,255,255,0.01)_100%)]"
+                : "bg-[linear-gradient(160deg,rgba(255,255,255,0.03)_0%,rgba(255,255,255,0.015)_50%,rgba(255,255,255,0.005)_100%)] group-hover/tab:bg-[linear-gradient(160deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0.02)_50%,rgba(255,255,255,0.008)_100%)]"
+            }`}
+          />
+          {/* Border */}
+          <div
+            className={`absolute inset-0 rounded-[4px] transition-all duration-400 pointer-events-none ${
+              isSelected
+                ? "border border-white/[0.15] shadow-[0_0_20px_rgba(255,255,255,0.03),inset_0_1px_0_rgba(255,255,255,0.06)]"
+                : "border border-white/[0.05] group-hover/tab:border-white/[0.1]"
+            }`}
+          />
+          {/* Left accent edge */}
+          {isSelected && (
+            <motion.div
+              layoutId="folderAccent"
+              className="absolute left-0 top-2 bottom-2 w-[2px] rounded-full bg-white/40"
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            />
+          )}
+
+          {/* Folder content */}
+          <div className="relative h-full flex flex-col justify-center px-5">
+            <span className={`text-xs md:text-[13px] font-semibold leading-tight transition-colors duration-300 ${
+              isSelected ? "text-white" : "text-dark-300 group-hover/tab:text-dark-100"
+            }`}>
+              {folder.name}
+            </span>
+            <div className="flex items-center gap-2 mt-2">
+              <span className={`text-[9px] font-space tabular-nums transition-colors duration-300 ${
+                isSelected ? "text-dark-300" : "text-dark-500"
+              }`}>
+                {folder.projects.length} items
+              </span>
+              <div className={`w-0.5 h-0.5 rounded-full transition-colors duration-300 ${
+                isSelected ? "bg-white/20" : "bg-white/[0.06]"
+              }`} />
+              <span className={`text-[9px] font-space uppercase tracking-wider transition-colors duration-300 ${
+                isSelected ? "text-dark-400" : "text-dark-600"
+              }`}>
+                {folder.icon}
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Folder tab (the protruding label) */}
+        <motion.div
+          className="absolute left-4 overflow-hidden rounded-t-[4px]"
+          style={{
+            bottom: 94,
+            width: 52,
+            height: 30,
+          }}
+          animate={{
+            y: isSelected ? -2 : 0,
+          }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          <div
+            className={`absolute inset-0 transition-all duration-400 ${
+              isSelected
+                ? "bg-[linear-gradient(180deg,rgba(255,255,255,0.06)_0%,rgba(255,255,255,0.08)_100%)]"
+                : "bg-[linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(255,255,255,0.03)_100%)] group-hover/tab:bg-[linear-gradient(180deg,rgba(255,255,255,0.03)_0%,rgba(255,255,255,0.05)_100%)]"
+            }`}
+          />
+          <div
+            className={`absolute inset-0 rounded-t-[4px] border-t border-l border-r pointer-events-none transition-all duration-400 ${
+              isSelected
+                ? "border-white/[0.15]"
+                : "border-white/[0.05] group-hover/tab:border-white/[0.1]"
+            }`}
+          />
+          {/* Tab label */}
+          <div className="relative h-full flex items-center justify-center">
+            <span className={`text-[10px] font-space font-bold tracking-[0.15em] transition-colors duration-300 ${
+              isSelected ? "text-white/80" : "text-dark-500 group-hover/tab:text-dark-300"
+            }`}>
+              {folder.icon}
+            </span>
+          </div>
+        </motion.div>
+      </div>
+    </motion.button>
+  );
+}
+
+/* ─── Project Card for Carousel ──────────────────────────────── */
 
 function ProjectCard({
   project,
-  index,
   onClick,
-  phase,
 }: {
   project: Project;
-  index: number;
   onClick: () => void;
-  phase: "idle" | "snapping" | "entering";
 }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(cardRef, { once: true, margin: "-40px" });
-
   const hasCaseStudy = !!project.caseResults;
 
-  // Staggered delay for entering cards (30ms per card, max 150ms)
-  const staggerDelay = `${Math.min(index * 0.03, 0.15)}s`;
+  return (
+    <motion.div
+      className="group relative w-full max-w-[520px] rounded-2xl bg-dark-900/90 overflow-hidden border border-white/[0.06] cursor-pointer hover:border-white/[0.12] transition-colors duration-300"
+      onClick={onClick}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.3 }}
+    >
+      {/* Image */}
+      <div className="relative aspect-[16/10] bg-dark-800 overflow-hidden">
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover opacity-75 group-hover:opacity-100 group-hover:scale-[1.04] transition-[opacity,transform] duration-700 ease-out will-change-transform"
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+            const parent = e.currentTarget.parentElement;
+            if (parent) {
+              parent.classList.add("flex", "items-center", "justify-center");
+              parent.innerHTML =
+                '<span class="text-dark-500 font-space text-xs">Screenshot coming soon</span>';
+            }
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-900/40 to-transparent" />
 
-  // Determine CSS classes based on phase
-  const phaseStyles =
-    phase === "snapping"
-      ? "opacity-0 scale-95"
-      : phase === "entering"
-      ? "opacity-100 scale-100"
-      : isInView
-      ? "opacity-100 scale-100"
-      : "opacity-0 scale-[0.97]";
+        {/* Scan line */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none overflow-hidden">
+          <div className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent animate-[scanDown_3s_ease-in-out_infinite]" />
+        </div>
+
+        {/* Result metric */}
+        {project.result && (
+          <div className="absolute bottom-3 right-4">
+            <span className="font-space font-bold text-white text-lg leading-none tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+              {project.result}
+            </span>
+          </div>
+        )}
+
+        {/* Hover CTA */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.07] backdrop-blur-lg border border-white/[0.12]">
+            <ExternalLink size={12} className="text-white/80" />
+            <span className="text-[10px] font-space uppercase tracking-[0.2em] text-white/90">
+              {hasCaseStudy ? "Case Study" : "Details"}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Info */}
+      <div className="p-5">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-[10px] font-space uppercase tracking-[0.15em] text-dark-400">
+            {project.category}
+          </span>
+          {hasCaseStudy && (
+            <>
+              <div className="w-1 h-1 rotate-45 bg-white/20" />
+              <span className="text-[9px] font-space uppercase tracking-[0.12em] text-dark-500">
+                Case Study
+              </span>
+            </>
+          )}
+        </div>
+        <h3 className="text-sm font-semibold text-dark-100 leading-snug mb-2 line-clamp-2 group-hover:text-white transition-colors duration-300">
+          {project.title}
+        </h3>
+        <div className="flex gap-1.5 flex-wrap">
+          {project.tools.slice(0, 3).map((t) => (
+            <span
+              key={t}
+              className="text-[8px] font-space text-dark-500 uppercase tracking-wider px-2 py-0.5 rounded border border-white/[0.04] bg-white/[0.02]"
+            >
+              {t}
+            </span>
+          ))}
+          {project.tools.length > 3 && (
+            <span className="text-[8px] font-space text-dark-600 px-1 self-center">
+              +{project.tools.length - 3}
+            </span>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─── Project Slider for selected folder ─────────────────────── */
+
+function ProjectSlider({
+  folderProjects,
+  onCardClick,
+}: {
+  folderProjects: Project[];
+  onCardClick: (project: Project) => void;
+}) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 10);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    checkScroll();
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    return () => el.removeEventListener("scroll", checkScroll);
+  }, [checkScroll, folderProjects]);
+
+  const scroll = useCallback((dir: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir === "left" ? -400 : 400, behavior: "smooth" });
+  }, []);
 
   return (
-    <div
-      ref={cardRef}
-      style={{
-        transitionDelay: phase === "entering" ? staggerDelay : "0s",
-        transitionDuration: phase === "snapping" ? "150ms" : "200ms",
-      }}
-      className={`relative rounded-2xl overflow-hidden transition-[opacity,transform] ease-out will-change-[opacity,transform] ${phaseStyles} ${
-        phase !== "snapping"
-          ? "cursor-pointer hover:-translate-y-1.5 hover:scale-[1.015] active:scale-[0.97]"
-          : ""
-      }`}
-      onClick={phase !== "snapping" ? onClick : undefined}
-    >
-      <div className="relative rounded-2xl bg-dark-900 overflow-hidden border border-dark-700/50 shadow-[0_4px_12px_rgba(0,0,0,0.2)] hover:border-accent-500/35 hover:shadow-[0_0_25px_rgba(var(--accent-rgb),0.12),0_20px_40px_rgba(0,0,0,0.4)] transition-[border-color,box-shadow] duration-200">
-        <div className="group relative overflow-hidden">
-        {/* Image */}
-        <div className="relative aspect-video bg-dark-800 overflow-hidden rounded-t-2xl">
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover opacity-80 scale-100 group-hover:opacity-100 group-hover:scale-[1.04] transition-[opacity,transform] duration-300 ease-out will-change-transform"
-            loading="lazy"
-            onError={(e) => {
-              e.currentTarget.style.display = "none";
-              const parent = e.currentTarget.parentElement;
-              if (parent) {
-                parent.classList.add("flex", "items-center", "justify-center");
-              }
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/20 to-transparent opacity-70" />
-          <div className="absolute top-3 left-3 flex items-center gap-1.5 text-[10px] font-space uppercase tracking-widest text-accent-300/90 px-2.5 py-1 rounded-full bg-dark-950/70 backdrop-blur-sm border border-accent-500/20 shadow-lg shadow-dark-950/40">
-            <div className="w-1 h-1 rotate-45 bg-accent-500/70" />
-            {project.category}
+    <div className="relative">
+      <div
+        ref={scrollRef}
+        className="flex gap-4 md:gap-5 overflow-x-auto pb-4 scrollbar-hide"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
+      >
+        {folderProjects.map((project) => (
+          <div key={project.title} className="flex-shrink-0 w-[300px] md:w-[380px]">
+            <ProjectCard project={project} onClick={() => onCardClick(project)} />
           </div>
-          {hasCaseStudy && (
-            <div className="absolute top-3 right-3 flex items-center gap-1 text-[9px] font-space uppercase tracking-widest text-accent-300/90 px-2 py-0.5 rounded-full bg-accent-500/10 backdrop-blur-sm border border-accent-500/25">
-              Case Study
-            </div>
-          )}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <div className="w-10 h-10 rounded-full bg-accent-500/10 backdrop-blur-sm flex items-center justify-center border border-accent-500/30">
-              <ExternalLink size={16} className="text-accent-300" />
-            </div>
-          </div>
-        </div>
-
-        <div className="p-5">
-          <h3 className="text-base font-semibold text-dark-50 mb-2 group-hover:text-white transition-colors duration-200">
-            {project.title}
-          </h3>
-          <p className="text-dark-400 text-sm leading-relaxed mb-3 line-clamp-2">
-            {project.description}
-          </p>
-
-          <div className="flex items-center gap-2 mb-3">
-            <div className="h-px flex-1 bg-gradient-to-r from-accent-500/15 to-transparent" />
-            <div className="w-1 h-1 rotate-45 bg-accent-500/30" />
-            <div className="h-px flex-1 bg-gradient-to-l from-accent-500/15 to-transparent" />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex gap-1.5">
-              {project.tools.slice(0, 3).map((t) => (
-                <span
-                  key={t}
-                  className="text-[9px] font-space text-dark-400 uppercase tracking-wider px-2 py-0.5 rounded border border-dark-700/40 bg-dark-800/40 group-hover:border-accent-500/15 group-hover:text-dark-300 transition-colors duration-200"
-                >
-                  {t}
-                </span>
-              ))}
-              {project.tools.length > 3 && (
-                <span className="text-[9px] font-space text-dark-400 px-1.5 py-0.5">
-                  +{project.tools.length - 3}
-                </span>
-              )}
-            </div>
-            {project.result && (
-              <span className="text-[10px] font-space font-semibold text-accent-300 bg-accent-500/[0.08] px-2 py-0.5 rounded-full border border-accent-500/15">
-                {project.result}
-              </span>
-            )}
-          </div>
-
-          {/* View Project CTA */}
-          <div className="overflow-hidden max-h-0 opacity-0 mt-0 group-hover:max-h-10 group-hover:opacity-100 group-hover:mt-3 transition-all duration-200 ease-out">
-            <div className="flex items-center gap-2 text-accent-400 text-xs font-space uppercase tracking-wider">
-              <span>{hasCaseStudy ? "View Case Study" : "View Project"}</span>
-              <ArrowRight size={12} className="transition-transform duration-200 group-hover:translate-x-1" />
-              <div className="h-px flex-1 bg-gradient-to-r from-accent-500/25 to-transparent" />
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
-      </div>
+
+      {canScrollLeft && (
+        <button
+          onClick={() => scroll("left")}
+          className="absolute left-0 top-0 bottom-4 w-14 flex items-center justify-start bg-gradient-to-r from-dark-950 via-dark-950/80 to-transparent z-10 cursor-pointer"
+        >
+          <div className="w-9 h-9 rounded-full border border-white/[0.08] bg-dark-900/95 backdrop-blur-sm flex items-center justify-center text-dark-300 hover:text-white hover:border-white/20 transition-all ml-1">
+            <ChevronLeft size={16} />
+          </div>
+        </button>
+      )}
+
+      {canScrollRight && (
+        <button
+          onClick={() => scroll("right")}
+          className="absolute right-0 top-0 bottom-4 w-14 flex items-center justify-end bg-gradient-to-l from-dark-950 via-dark-950/80 to-transparent z-10 cursor-pointer"
+        >
+          <div className="w-9 h-9 rounded-full border border-white/[0.08] bg-dark-900/95 backdrop-blur-sm flex items-center justify-center text-dark-300 hover:text-white hover:border-white/20 transition-all mr-1">
+            <ChevronRight size={16} />
+          </div>
+        </button>
+      )}
     </div>
   );
 }
@@ -973,70 +1190,13 @@ function ProjectCard({
 /* ─── Main Section ────────────────────────────────────────────── */
 
 export default function Portfolio() {
-  const [filter, setFilter] = useState("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [snappingTitles, setSnappingTitles] = useState<Set<string>>(new Set());
-  const [enteringTitles, setEnteringTitles] = useState<Set<string>>(new Set());
-  const [visibleFilter, setVisibleFilter] = useState("All");
-  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const enterTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const [activeFolder, setActiveFolder] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  const handleFilterChange = useCallback(
-    (newFilter: string) => {
-      if (newFilter === filter) return;
-
-      // Clear any in-progress transitions
-      clearTimeout(timerRef.current);
-      clearTimeout(enterTimerRef.current);
-
-      const currentSet = projects.filter((p) => matchesFilter(filter, p));
-      const nextSet = projects.filter((p) => matchesFilter(newFilter, p));
-      const leaving = currentSet.filter((p) => !nextSet.some((np) => np.title === p.title));
-      const entering = nextSet.filter((p) => !currentSet.some((cp) => cp.title === p.title));
-
-      setFilter(newFilter);
-
-      if (leaving.length > 0) {
-        // Phase 1: fade out leaving cards (150ms)
-        setSnappingTitles(new Set(leaving.map((p) => p.title)));
-        setEnteringTitles(new Set());
-
-        timerRef.current = setTimeout(() => {
-          // Phase 2: swap grid + stagger-fade new cards in
-          setSnappingTitles(new Set());
-          setVisibleFilter(newFilter);
-          if (entering.length > 0) {
-            requestAnimationFrame(() => {
-              setEnteringTitles(new Set(entering.map((p) => p.title)));
-              enterTimerRef.current = setTimeout(() => setEnteringTitles(new Set()), 250);
-            });
-          }
-        }, 160);
-      } else {
-        setVisibleFilter(newFilter);
-        setSnappingTitles(new Set());
-        if (entering.length > 0) {
-          requestAnimationFrame(() => {
-            setEnteringTitles(new Set(entering.map((p) => p.title)));
-            enterTimerRef.current = setTimeout(() => setEnteringTitles(new Set()), 250);
-          });
-        }
-      }
-    },
-    [filter]
-  );
-
   const handleCardClick = useCallback((project: Project) => {
     setSelectedProject(project);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      clearTimeout(timerRef.current);
-      clearTimeout(enterTimerRef.current);
-    };
   }, []);
 
   // Scroll lock when modal is open
@@ -1064,15 +1224,6 @@ export default function Portfolio() {
     };
   }, [selectedProject]);
 
-  // Build visible list: current filter + any cards mid-snap
-  const filtered = useMemo(() => {
-    const base = projects.filter((p) => matchesFilter(visibleFilter, p));
-    const snapping = projects.filter(
-      (p) => snappingTitles.has(p.title) && !base.some((b) => b.title === p.title)
-    );
-    return [...base, ...snapping];
-  }, [visibleFilter, snappingTitles]);
-
   return (
     <section
       id="work"
@@ -1080,11 +1231,12 @@ export default function Portfolio() {
       className="relative py-28 md:py-36"
     >
       <div className="max-w-6xl mx-auto px-6 md:px-10">
+        {/* Header — reverted to original */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-12"
+          className="mb-14"
         >
           <div className="flex items-center gap-3 mb-3">
             <div className="w-2 h-2 rotate-45 bg-accent-500/60 shadow-[0_0_8px_rgba(var(--accent-rgb),0.3)]" />
@@ -1093,49 +1245,58 @@ export default function Portfolio() {
             </span>
             <div className="h-px flex-1 bg-gradient-to-r from-accent-500/20 to-transparent" />
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold tracking-[-0.02em] mb-8">
-            <TextReveal>Featured</TextReveal>{" "}
-            <span className="text-accent-400">
-              <TextReveal delay={0.2}>work.</TextReveal>
+          <div className="flex items-end justify-between">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-[-0.02em]">
+              <TextReveal>Featured</TextReveal>{" "}
+              <span className="text-accent-400">
+                <TextReveal delay={0.2}>work.</TextReveal>
+              </span>
+            </h2>
+            <span className="hidden md:flex items-center gap-2 text-sm font-space text-dark-500">
+              <span className="text-dark-100 font-semibold">{projects.length}</span>
+              <span>projects</span>
+              <div className="w-1 h-1 rotate-45 bg-dark-600" />
+              <span className="text-dark-100 font-semibold">{folders.length}</span>
+              <span>folders</span>
             </span>
-          </h2>
+          </div>
+        </motion.div>
 
-          {/* Tool filters */}
-          <div className="flex flex-wrap gap-2">
-            {filterLabels.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => handleFilterChange(cat)}
-                className={`px-4 py-1.5 text-xs font-space uppercase tracking-wider rounded-full border bg-transparent cursor-pointer transition-[border-color,color,box-shadow] duration-150 hover:scale-105 active:scale-95 ${
-                  filter === cat
-                    ? "border-accent-500/50 text-accent-300 shadow-[0_0_12px_rgba(var(--accent-rgb),0.12)]"
-                    : "border-dark-700/50 text-dark-400 hover:border-accent-500/25 hover:text-dark-300"
-                }`}
-              >
-                {cat}
-              </button>
+        {/* Folder selector */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.15, duration: 0.6 }}
+          className="mb-12"
+        >
+          <div className="flex gap-2 md:gap-3 overflow-x-auto scrollbar-hide pb-6 pt-2" style={{ scrollbarWidth: "none" }}>
+            {folders.map((folder, i) => (
+              <FolderTab
+                key={folder.name}
+                folder={folder}
+                index={i}
+                isSelected={activeFolder === i}
+                onClick={() => setActiveFolder(i)}
+              />
             ))}
           </div>
         </motion.div>
 
-        {/* Project grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((project, i) => (
-            <ProjectCard
-              key={project.title}
-              project={project}
-              index={i}
-              onClick={() => handleCardClick(project)}
-              phase={
-                snappingTitles.has(project.title)
-                  ? "snapping"
-                  : enteringTitles.has(project.title)
-                  ? "entering"
-                  : "idle"
-              }
+        {/* Project cards for selected folder */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeFolder}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <ProjectSlider
+              folderProjects={folders[activeFolder].projects}
+              onCardClick={handleCardClick}
             />
-          ))}
-        </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Modal - case study or simple lightbox */}

@@ -8,7 +8,7 @@ function getAccentRGB(): { r: number; g: number; b: number } {
     const [r, g, b] = raw.split(",").map((s) => parseInt(s.trim(), 10));
     if (!isNaN(r) && !isNaN(g) && !isNaN(b)) return { r, g, b };
   }
-  return { r: 139, g: 92, b: 246 };
+  return { r: 255, g: 255, b: 255 };
 }
 
 const TRAIL_LENGTH = 30;

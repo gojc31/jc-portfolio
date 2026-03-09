@@ -1,36 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-  --font-outfit: "Outfit", sans-serif;
-  --font-space: "Space Grotesk", monospace;
+  --font-body: "DM Sans", sans-serif;
+  --font-space: "Space Mono", monospace;
+  --font-syne: "Syne", sans-serif;
 
-  --color-dark-950: #0C0A14;
-  --color-dark-900: #13111C;
-  --color-dark-800: #1C1926;
-  --color-dark-700: #2A2738;
-  --color-dark-600: #3D3A4E;
-  --color-dark-400: #7A7790;
-  --color-dark-300: #A8A5B8;
-  --color-dark-100: #E0DEE8;
-  --color-dark-50: #F5F3FF;
+  --color-dark-950: #0E0E10;
+  --color-dark-900: #141416;
+  --color-dark-800: #1A1A1C;
+  --color-dark-700: #262628;
+  --color-dark-600: #3A3A3C;
+  --color-dark-400: #7C7C80;
+  --color-dark-300: #A8A8AC;
+  --color-dark-100: #E0E0E2;
+  --color-dark-50: #F5F5F5;
 
-  --color-accent-500: #8B5CF6;
-  --color-accent-400: #A78BFA;
-  --color-accent-300: #C4B5FD;
+  --color-accent-500: #DBA550;
+  --color-accent-400: #EBC074;
+  --color-accent-300: #C4903A;
 
-  --color-glow: rgba(139, 92, 246, 0.06);
-  --color-glow-border: rgba(139, 92, 246, 0.1);
+  --color-glow: rgba(219, 165, 80, 0.04);
+  --color-glow-border: rgba(219, 165, 80, 0.08);
 
-  --accent-rgb: 139, 92, 246;
-}
-
-/* Indigo cool theme */
-[data-theme="grey"] {
-  --color-accent-500: #6366F1;
-  --color-accent-400: #818CF8;
-  --color-accent-300: #A5B4FC;
-
-  --accent-rgb: 99, 102, 241;
+  --accent-rgb: 219, 165, 80;
 }
 
 @layer base {
@@ -42,27 +34,36 @@
 
   html {
     scroll-behavior: smooth;
-    background-color: #0C0A14;
-    color: #FAFAFA;
+    background-color: #0E0E10;
+    color: #F5F5F5;
   }
 
   body {
-    font-family: "Outfit", sans-serif;
+    font-family: "DM Sans", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+  }
+
+  h1, h2, h3 {
+    font-family: "Syne", sans-serif;
   }
 
   ::selection {
     background-color: color-mix(in srgb, var(--color-accent-500) 20%, transparent);
     color: #fff;
   }
+}
 
-  @media (pointer: fine) {
-    *, *::before, *::after {
-      cursor: none !important;
-    }
-  }
+/* Hide scrollbar for slider rows */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* Scan line animation */
+@keyframes scanDown {
+  0%, 100% { top: -1px; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
 }
 
 /* Noise overlay */
@@ -86,7 +87,7 @@ body::before {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0C0A14;
+  background: #0E0E10;
 }
 ::-webkit-scrollbar-thumb {
   background: #27272A;

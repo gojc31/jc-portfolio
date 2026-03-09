@@ -5,21 +5,21 @@ import TextReveal from "./TextReveal";
 const testimonials = [
   {
     quote:
-      "JC didn't just automate our workflows — he fundamentally changed how our team operates. We went from drowning in manual tasks to having systems that run themselves.",
-    name: "Sarah Chen",
-    role: "COO, TechVentures Inc.",
+      "JC built our entire CRM automation and chatbot marketing system from scratch. Lead qualification that used to take our team hours now runs on autopilot through GoHighLevel and ManyChat.",
+    name: "Pure Tropix",
+    role: "CRM & Conversational Marketing Automation",
   },
   {
     quote:
-      "The AI chatbot he built handles 80% of our support tickets without human intervention. Our response time went from hours to seconds. Absolute game-changer.",
-    name: "Marcus Rivera",
-    role: "Head of Support, ShopFlow",
+      "Our revenue operations were scattered across five different tools with no sync between them. JC wired Close.io, Hyros, and ActiveCampaign into a single pipeline — attribution tracking finally works.",
+    name: "10xDigital Solutions",
+    role: "RevOps Automation & Integration",
   },
   {
     quote:
-      "Working with JC felt like having a senior engineer and a business strategist in one. He understood our problems deeply and shipped solutions remarkably fast.",
-    name: "Amara Osei",
-    role: "Founder, DataPulse Analytics",
+      "JC designed our AI-powered coaching workflows — RAG pipelines, vector search, automated lifecycle CRM. What took our team a full day of manual work now runs in the background 24/7.",
+    name: "ODA Skool LLC",
+    role: "AI Automation for Healthcare Coaching",
   },
 ];
 
@@ -67,7 +67,7 @@ function TypingText({ text, speed = 20 }: { text: string; speed?: number }) {
   }, [displayedCount, text, speed]);
 
   return (
-    <span className="font-outfit">
+    <span className="font-body">
       {text.slice(0, displayedCount)}
       {!isComplete && (
         <span
@@ -213,12 +213,12 @@ export default function Testimonials() {
           className="mb-16"
         >
           <span className="text-sm font-space text-accent-500/70 tracking-widest uppercase block mb-3">
-            Testimonials
+            Client Work
           </span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-[-0.02em]">
-            <TextReveal>What people</TextReveal>{" "}
+            <TextReveal>Real projects,</TextReveal>{" "}
             <span className="text-accent-400">
-              <TextReveal delay={0.3}>say.</TextReveal>
+              <TextReveal delay={0.3}>real results.</TextReveal>
             </span>
           </h2>
         </motion.div>

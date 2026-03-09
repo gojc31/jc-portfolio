@@ -7,9 +7,9 @@ import PulseRing from "./PulseRing";
 import TextReveal from "./TextReveal";
 
 const stats = [
-  { end: 50, suffix: "+", label: "Projects Delivered" },
+  { end: 12, suffix: "+", label: "Clients Served" },
   { end: 14, suffix: "+", label: "Hours Saved / Week", decimals: 0 },
-  { end: 95, suffix: "%", label: "Client Satisfaction" },
+  { end: 6, suffix: "", label: "Industries Covered" },
 ];
 
 const cards = [

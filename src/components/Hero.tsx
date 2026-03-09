@@ -10,7 +10,7 @@ import NetworkCanvas from "./NetworkCanvas";
 
 function getAccentHex(): string {
   const rgb = getComputedStyle(document.documentElement).getPropertyValue("--accent-rgb").trim();
-  if (!rgb) return "#8B5CF6";
+  if (!rgb) return "#FFFFFF";
   const [r, g, b] = rgb.split(",").map((s) => parseInt(s.trim(), 10));
   return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
@@ -333,9 +333,9 @@ function RunningBot({
 function getBotColors() {
   const s = getComputedStyle(document.documentElement);
   return {
-    gold: s.getPropertyValue("--color-accent-500").trim() || "#8B5CF6",
-    lightGold: s.getPropertyValue("--color-accent-400").trim() || "#A78BFA",
-    warmGold: s.getPropertyValue("--color-accent-300").trim() || "#C4B5FD",
+    gold: s.getPropertyValue("--color-accent-500").trim() || "#FFFFFF",
+    lightGold: s.getPropertyValue("--color-accent-400").trim() || "#E0E0E2",
+    warmGold: s.getPropertyValue("--color-accent-300").trim() || "#A8A8AC",
     muted: "#A1A1AA",
     dim: "#71717A",
   };

@@ -350,7 +350,7 @@ export default function Services() {
         >
           <div className="text-center">
             <span className="text-2xl md:text-3xl font-bold font-space text-accent-500">
-              <AnimatedCounter end={200} suffix="+" duration={2200} />
+              <AnimatedCounter end={50} suffix="+" duration={2200} />
             </span>
             <span className="block mt-1 text-[11px] tracking-widest uppercase text-dark-400">Automations Built</span>
           </div>

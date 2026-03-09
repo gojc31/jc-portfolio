@@ -90,7 +90,7 @@ export default function Contact() {
         >
           <div
             className="calendly-inline-widget"
-            data-url={`${CALENDLY_URL}?hide_gdpr_banner=1&background_color=0c0a14&text_color=f5f3ff&primary_color=8b5cf6`}
+            data-url={`${CALENDLY_URL}?hide_gdpr_banner=1&background_color=0e0e10&text_color=f5f5f5&primary_color=dba550`}
             style={{ minWidth: 280, height: 480, width: "100%" }}
           />
         </motion.div>

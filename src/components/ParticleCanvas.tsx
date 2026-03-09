@@ -14,7 +14,7 @@ function getAccentRGB(): string {
   const raw = getComputedStyle(document.documentElement)
     .getPropertyValue("--accent-rgb")
     .trim();
-  return raw || "139,92,246";
+  return raw || "255,255,255";
 }
 
 const NODE_COUNT = 40;

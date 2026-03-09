@@ -1,41 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import { SoundToggle } from "./SoundManager";
-
-function ThemeToggle() {
-  const [isViolet, setIsViolet] = useState(true);
-
-  const toggle = useCallback(() => {
-    const next = !isViolet;
-    setIsViolet(next);
-    document.documentElement.setAttribute(
-      "data-theme",
-      next ? "" : "grey"
-    );
-  }, [isViolet]);
-
-  return (
-    <button
-      onClick={toggle}
-      aria-label={isViolet ? "Switch to indigo theme" : "Switch to violet theme"}
-      className="relative w-9 h-5 rounded-full border border-dark-700/50 bg-dark-800/80 flex items-center px-0.5 cursor-pointer transition-colors duration-300 hover:border-dark-600/60"
-    >
-      <motion.div
-        className="w-4 h-4 rounded-full"
-        animate={{
-          x: isViolet ? 14 : 0,
-          backgroundColor: isViolet ? "#8B5CF6" : "#6366F1",
-          boxShadow: isViolet
-            ? "0 0 8px rgba(139,92,246,0.5)"
-            : "0 0 6px rgba(99,102,241,0.4)",
-        }}
-        transition={{ type: "spring", stiffness: 300, damping: 22 }}
-      />
-    </button>
-  );
-}
 
 const links = [
   { label: "About", href: "#about" },
@@ -134,7 +101,6 @@ export default function Navbar() {
               </a>
             );
           })}
-          <ThemeToggle />
           <SoundToggle />
           <MagneticButton href="#contact">
             <span className="inline-block px-5 py-2 text-sm font-medium text-dark-50 border border-accent-500/40 rounded-full hover:bg-accent-500 hover:text-dark-950 transition-all duration-300">
