@@ -9,11 +9,11 @@ interface AmbientOrbsProps {
 
 function getAccentRGB(): string {
   const raw = getComputedStyle(document.documentElement).getPropertyValue("--accent-rgb").trim();
-  return raw || "212,160,60";
+  return raw || "139,92,246";
 }
 
 const COLOR_MAP: Record<string, string> = {
-  accent: "212,160,60",
+  accent: "139,92,246",
 };
 
 function randomBetween(min: number, max: number) {

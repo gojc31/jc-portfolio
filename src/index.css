@@ -4,33 +4,33 @@
   --font-outfit: "Outfit", sans-serif;
   --font-space: "Space Grotesk", monospace;
 
-  --color-dark-950: #09090B;
-  --color-dark-900: #111113;
-  --color-dark-800: #18181B;
-  --color-dark-700: #27272A;
-  --color-dark-600: #3F3F46;
-  --color-dark-400: #71717A;
-  --color-dark-300: #A1A1AA;
-  --color-dark-100: #E4E4E7;
-  --color-dark-50: #FAFAFA;
+  --color-dark-950: #0C0A14;
+  --color-dark-900: #13111C;
+  --color-dark-800: #1C1926;
+  --color-dark-700: #2A2738;
+  --color-dark-600: #3D3A4E;
+  --color-dark-400: #7A7790;
+  --color-dark-300: #A8A5B8;
+  --color-dark-100: #E0DEE8;
+  --color-dark-50: #F5F3FF;
 
-  --color-accent-500: #D4A03C;
-  --color-accent-400: #E4B44E;
-  --color-accent-300: #F0CC7A;
+  --color-accent-500: #8B5CF6;
+  --color-accent-400: #A78BFA;
+  --color-accent-300: #C4B5FD;
 
-  --color-glow: rgba(255, 255, 255, 0.06);
-  --color-glow-border: rgba(255, 255, 255, 0.1);
+  --color-glow: rgba(139, 92, 246, 0.06);
+  --color-glow-border: rgba(139, 92, 246, 0.1);
 
-  --accent-rgb: 212, 160, 60;
+  --accent-rgb: 139, 92, 246;
 }
 
-/* Premium monochrome theme */
+/* Indigo cool theme */
 [data-theme="grey"] {
-  --color-accent-500: #C0C0C8;
-  --color-accent-400: #D8D8E0;
-  --color-accent-300: #ECECF0;
+  --color-accent-500: #6366F1;
+  --color-accent-400: #818CF8;
+  --color-accent-300: #A5B4FC;
 
-  --accent-rgb: 192, 192, 200;
+  --accent-rgb: 99, 102, 241;
 }
 
 @layer base {
@@ -42,7 +42,7 @@
 
   html {
     scroll-behavior: smooth;
-    background-color: #09090B;
+    background-color: #0C0A14;
     color: #FAFAFA;
   }
 
@@ -86,7 +86,7 @@ body::before {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #09090B;
+  background: #0C0A14;
 }
 ::-webkit-scrollbar-thumb {
   background: #27272A;

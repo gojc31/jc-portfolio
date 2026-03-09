@@ -5,31 +5,31 @@ import MagneticButton from "./MagneticButton";
 import { SoundToggle } from "./SoundManager";
 
 function ThemeToggle() {
-  const [isGold, setIsGold] = useState(true);
+  const [isViolet, setIsViolet] = useState(true);
 
   const toggle = useCallback(() => {
-    const next = !isGold;
-    setIsGold(next);
+    const next = !isViolet;
+    setIsViolet(next);
     document.documentElement.setAttribute(
       "data-theme",
       next ? "" : "grey"
     );
-  }, [isGold]);
+  }, [isViolet]);
 
   return (
     <button
       onClick={toggle}
-      aria-label={isGold ? "Switch to grey theme" : "Switch to gold theme"}
+      aria-label={isViolet ? "Switch to indigo theme" : "Switch to violet theme"}
       className="relative w-9 h-5 rounded-full border border-dark-700/50 bg-dark-800/80 flex items-center px-0.5 cursor-pointer transition-colors duration-300 hover:border-dark-600/60"
     >
       <motion.div
         className="w-4 h-4 rounded-full"
         animate={{
-          x: isGold ? 14 : 0,
-          backgroundColor: isGold ? "#D4A03C" : "#C0C0C8",
-          boxShadow: isGold
-            ? "0 0 8px rgba(212,160,60,0.5)"
-            : "0 0 6px rgba(192,192,200,0.4)",
+          x: isViolet ? 14 : 0,
+          backgroundColor: isViolet ? "#8B5CF6" : "#6366F1",
+          boxShadow: isViolet
+            ? "0 0 8px rgba(139,92,246,0.5)"
+            : "0 0 6px rgba(99,102,241,0.4)",
         }}
         transition={{ type: "spring", stiffness: 300, damping: 22 }}
       />
