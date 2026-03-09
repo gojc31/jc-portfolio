@@ -23,7 +23,7 @@ export default function TextScramble({
 }: TextScrambleProps) {
   const text = children;
   const [display, setDisplay] = useState("");
-  const [resolvedCount, setResolvedCount] = useState(0);
+  const [, setResolvedCount] = useState(0);
   const rafRef = useRef<number>(0);
   const lastCycleRef = useRef(0);
   const startedRef = useRef(false);

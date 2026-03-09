@@ -15,7 +15,7 @@ export default function MagneticButton({
   href,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
+  const [, setIsHovered] = useState(false);
 
   // Container magnetic pull (existing behavior)
   const x = useMotionValue(0);
