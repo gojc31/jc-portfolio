@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Services from "./components/Services";
+import TechArsenal from "./components/TechArsenal";
 import Portfolio from "./components/Portfolio";
 import ClientMarquee from "./components/ClientMarquee";
 import Testimonials from "./components/Testimonials";
@@ -39,6 +40,10 @@ function App() {
             <Services />
           </ScrollReveal>
         </ParallaxSection>
+        <SectionDivider />
+        <ScrollReveal variant="fade-up">
+          <TechArsenal />
+        </ScrollReveal>
         <SectionDivider />
         <ParallaxSection variant="grid" intensity={0.3}>
           <ScrollReveal variant="fade-up" delay={0.1}>

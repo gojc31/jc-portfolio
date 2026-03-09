@@ -9,6 +9,13 @@ export default function Footer() {
       {/* Gradient line */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-accent-500/20 to-transparent" />
 
+      {/* Quote */}
+      <div className="max-w-6xl mx-auto px-6 md:px-10 mb-6">
+        <p className="text-center text-sm text-dark-400 italic font-space">
+          &ldquo;I translate complex operational bottlenecks into scalable, automated systems.&rdquo;
+        </p>
+      </div>
+
       <div className="max-w-6xl mx-auto px-6 md:px-10 flex items-center justify-between">
         <div className="relative">
           <button

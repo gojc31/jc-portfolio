@@ -300,6 +300,158 @@ const projects: Project[] = [
       { metric: "Repeat Questions", value: 60, suffix: "% down" },
     ],
   },
+  {
+    title: "Automated Xero Transaction Export to Asana",
+    category: "FinOps",
+    description:
+      "Accounting workflow that monitors completed Asana tasks, exports transaction data from Xero via API, and uploads categorized CSVs back into the correct Asana task using routing and iteration.",
+    image: "https://i.imgur.com/GRc2Nnb.png",
+    tools: ["Make", "Xero", "Asana", "CSV"],
+    result: "8 hours saved weekly",
+    client: "Accounting Firm",
+    problem:
+      "Accountants manually exported transactions from Xero, categorized them in spreadsheets, and uploaded reports to the correct Asana tasks. The process was tedious, error-prone, and consumed an entire workday each week.",
+    solution:
+      "Built a Make.com workflow that watches for completed Asana tasks, pulls the associated transaction data from Xero via API, categorizes and formats it as CSV, and attaches the file to the correct Asana task — fully automated with routing and iteration for bulk handling.",
+    caseResults: [
+      { metric: "Hours Saved Weekly", value: 8, suffix: "h" },
+      { metric: "Export Accuracy", value: 100, suffix: "%" },
+      { metric: "Manual Steps", value: 0, suffix: "" },
+    ],
+  },
+  {
+    title: "AI-Powered Customer Support Agent",
+    category: "AI Agent",
+    description:
+      "Webhook-triggered customer support agent using n8n. Pulls structured data from a Google Sheets knowledge base, queries Gemini AI for contextual answers, and provides accurate, consistent support.",
+    image: "https://i.imgur.com/ZR8pafy.png",
+    tools: ["n8n", "Google Sheets", "Gemini AI", "Webhooks"],
+    result: "75% faster resolution",
+    client: "SaaS Platform",
+    problem:
+      "Support agents spent excessive time searching through documentation and previous tickets to answer recurring questions. Response quality varied widely between agents, and customers experienced long wait times.",
+    solution:
+      "Developed a webhook-triggered AI support agent in n8n that pulls structured data from a Google Sheets knowledge base, queries Google Gemini for contextual answers, and returns accurate responses. The agent handles 75% of inquiries autonomously.",
+    caseResults: [
+      { metric: "Resolution Speed", value: 75, suffix: "% faster" },
+      { metric: "Auto-resolved", value: 75, suffix: "%" },
+      { metric: "Customer Satisfaction", value: 92, suffix: "%" },
+    ],
+  },
+  {
+    title: "Automated Gmail Attachment Sorting & Logging",
+    category: "Ops Automation",
+    description:
+      "Monitors inbox for emails with attachments, uses Gemini AI to categorize content, stores files in the correct Drive folder, and logs metadata into Google Sheets for auditability.",
+    image: "https://i.imgur.com/aIp9z68.png",
+    tools: ["Make", "Gmail", "Google Drive", "Gemini AI", "Sheets"],
+    result: "5 min processing time",
+    client: "Legal Services Firm",
+    problem:
+      "Staff manually downloaded, categorized, and filed email attachments into the correct Drive folders. With hundreds of daily emails, documents were misfiled, lost, or delayed — creating compliance risks.",
+    solution:
+      "Created a Make.com workflow that monitors Gmail for attachments, uses Gemini AI to analyze and categorize file content, routes documents to the correct Google Drive folder, and logs all metadata in Sheets for a complete audit trail.",
+    caseResults: [
+      { metric: "Processing Time", value: 5, suffix: " min" },
+      { metric: "Filing Accuracy", value: 98, suffix: "%" },
+      { metric: "Manual Work", value: 0, suffix: " hrs" },
+    ],
+  },
+  {
+    title: "AI-Powered Facebook Messenger Engagement Agent",
+    category: "AI Agent",
+    description:
+      "Webhook-triggered system capturing Facebook Messenger inquiries and page comments, routing to Gemini AI for personalized response generation, and auto-replying via the Facebook API.",
+    image: "https://i.imgur.com/5aJ2xfc.png",
+    tools: ["n8n", "Gemini AI", "Facebook API", "Webhooks"],
+    result: "24/7 engagement",
+    client: "E-Commerce Brand",
+    problem:
+      "The brand received hundreds of Messenger inquiries and page comments daily but couldn't respond fast enough. Delayed replies led to lost sales, and hiring a 24/7 support team was not feasible.",
+    solution:
+      "Built a webhook-triggered n8n system that captures all Facebook Messenger inquiries and page comments, routes each query to a specialized Gemini AI agent for contextual, personalized responses, and auto-replies via the Facebook API within seconds.",
+    caseResults: [
+      { metric: "Response Coverage", value: 24, suffix: "/7" },
+      { metric: "Avg Reply Time", value: 5, suffix: "s" },
+      { metric: "Engagement Rate", value: 40, suffix: "% up" },
+    ],
+  },
+  {
+    title: "Automated Job & Document Management System",
+    category: "Ops Automation",
+    description:
+      "Monitors job creation statuses in a master Google Sheet, auto-generates customer documents (contracts, invoices, work orders) using Apps Script, and files them in the correct Drive folder.",
+    image: "https://i.imgur.com/dMQVsy1.png",
+    tools: ["Zapier", "Google Sheets", "Google Drive", "Apps Script"],
+    result: "3 second document creation",
+    client: "Field Services Company",
+    problem:
+      "Every new job required manually creating contracts, invoices, and work orders from templates, then filing them in the correct client folder. This admin overhead delayed job starts and created frequent errors.",
+    solution:
+      "Built a Zapier workflow that watches for new jobs in a master Google Sheet, triggers Apps Script to auto-generate all required documents from templates, populates them with job data, and files everything in the correct Google Drive folder structure.",
+    caseResults: [
+      { metric: "Doc Creation Time", value: 3, suffix: "s" },
+      { metric: "Filing Accuracy", value: 100, suffix: "%" },
+      { metric: "Admin Hours Saved", value: 15, suffix: "h/wk" },
+    ],
+  },
+  {
+    title: "Automated Lead Response & CRM Tag Hygiene",
+    category: "Sales Ops",
+    description:
+      "Triggered by inbound contact responses (SMS/Email), uses conditional logic to manage lead disposition — removing outdated tags, adding segmentation tags, and confirming changes via SMS.",
+    image: "https://i.imgur.com/XQMJN3U.png",
+    tools: ["GoHighLevel", "SMS", "Email", "Tag Logic"],
+    result: "95% clean lead data",
+    client: "Insurance Agency",
+    problem:
+      "The CRM was cluttered with stale tags and incorrect lead statuses. Reps couldn't trust the data — 'New Lead' tags lingered on contacts who had already responded, and segmentation was unreliable for campaign targeting.",
+    solution:
+      "Built a GoHighLevel workflow triggered by inbound responses that automatically removes outdated status tags, applies correct segmentation tags based on response content, and confirms disposition changes to the customer via SMS — maintaining 95% data hygiene.",
+    caseResults: [
+      { metric: "Data Hygiene", value: 95, suffix: "%" },
+      { metric: "Tag Accuracy", value: 100, suffix: "%" },
+      { metric: "Manual Cleanup", value: 0, suffix: " hrs" },
+    ],
+  },
+  {
+    title: "AI Weather-Contextual Social Media Posting",
+    category: "Content Gen",
+    description:
+      "Scheduled n8n workflow using weather data as a prompt for Gemini AI to generate daily quotes with auto-generated images, with deduplication checks before posting to Facebook.",
+    image: "https://i.imgur.com/LK5MQoC.png",
+    tools: ["n8n", "Gemini AI", "OpenWeatherMap", "Facebook API", "Sheets"],
+    result: "100% automated content",
+    client: "Lifestyle Brand",
+    problem:
+      "The brand wanted daily social media posts that felt timely and relevant but had no content team. Generic scheduled posts performed poorly, and manually creating context-aware content daily wasn't sustainable.",
+    solution:
+      "Created a scheduled n8n workflow that pulls current weather data, uses it as context for Gemini AI to generate unique daily quotes, sends them to an image generation API, checks a Google Sheet log for deduplication, and auto-posts the final content to Facebook.",
+    caseResults: [
+      { metric: "Content Automation", value: 100, suffix: "%" },
+      { metric: "Engagement Rate", value: 35, suffix: "% up" },
+      { metric: "Daily Posts", value: 1, suffix: "/day" },
+    ],
+  },
+  {
+    title: "AI Inbound Voice Agent & Appointment Booker (GHL)",
+    category: "Voice AI",
+    description:
+      "Native GoHighLevel AI Agent with a comprehensive knowledge base and professional persona. Autonomously manages inbound calls, books appointments, and transfers high-value calls to human team members.",
+    image: "https://i.imgur.com/5aJ2xfc.png",
+    tools: ["GoHighLevel", "AI Agent", "Knowledge Base", "Calendar"],
+    result: "24/7 call handling",
+    client: "Medical Practice",
+    problem:
+      "The practice missed after-hours calls and overburdened front desk staff during peak times. Patients couldn't book appointments outside business hours, leading to lost revenue and poor patient experience.",
+    solution:
+      "Configured a native GoHighLevel AI Agent with a comprehensive medical knowledge base and a professional, empathetic persona. The agent handles all inbound calls 24/7, books appointments, answers FAQs, and intelligently transfers urgent cases to on-call staff.",
+    caseResults: [
+      { metric: "Call Coverage", value: 24, suffix: "/7" },
+      { metric: "Appointments Booked", value: 60, suffix: "% auto" },
+      { metric: "Patient Satisfaction", value: 95, suffix: "%" },
+    ],
+  },
 ];
 
 /* ─── Tool-based filter map ──────────────────────────────────── */

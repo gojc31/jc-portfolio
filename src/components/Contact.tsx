@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Linkedin, Github, Twitter } from "lucide-react";
+import { Linkedin, Github, Twitter, Mail, Phone, MapPin, Calendar, Send } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import TextReveal from "./TextReveal";
 
@@ -95,33 +95,67 @@ export default function Contact() {
           />
         </motion.div>
 
-        {/* Bottom info */}
+        {/* Contact details + actions */}
         <motion.div
-          className="flex flex-col sm:flex-row items-center justify-between gap-6 mt-10"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          className="grid sm:grid-cols-2 gap-6 mt-12 max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.6 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
         >
-          <a
-            href="mailto:hello@workwithjc.dev"
-            className="text-dark-300 hover:text-white transition-colors font-space text-sm"
-          >
-            hello@workwithjc.dev
-          </a>
+          {/* Contact details card */}
+          <div className="rounded-2xl border border-dark-700/30 bg-dark-900/50 p-6 space-y-4">
+            <h3 className="text-sm font-space text-accent-500/70 tracking-widest uppercase mb-4">
+              Contact Details
+            </h3>
+            <a href="mailto:gojc31@gmail.com" className="flex items-center gap-3 text-dark-300 hover:text-white transition-colors group">
+              <span className="w-9 h-9 rounded-lg bg-dark-800 border border-dark-700/50 flex items-center justify-center group-hover:border-accent-500/30 transition-colors">
+                <Mail size={16} className="text-accent-400/70" />
+              </span>
+              <span className="text-sm font-space">gojc31@gmail.com</span>
+            </a>
+            <a href="tel:+639957505336" className="flex items-center gap-3 text-dark-300 hover:text-white transition-colors group">
+              <span className="w-9 h-9 rounded-lg bg-dark-800 border border-dark-700/50 flex items-center justify-center group-hover:border-accent-500/30 transition-colors">
+                <Phone size={16} className="text-accent-400/70" />
+              </span>
+              <span className="text-sm font-space">+63 995 750 5336</span>
+            </a>
+            <div className="flex items-center gap-3 text-dark-400">
+              <span className="w-9 h-9 rounded-lg bg-dark-800 border border-dark-700/50 flex items-center justify-center">
+                <MapPin size={16} className="text-accent-400/70" />
+              </span>
+              <span className="text-sm font-space">Angono Rizal, Philippines</span>
+            </div>
+          </div>
 
-          <div className="flex gap-4">
-            {[
-              { icon: Linkedin, href: "#" },
-              { icon: Github, href: "#" },
-              { icon: Twitter, href: "#" },
-            ].map(({ icon: Icon, href }, i) => (
-              <MagneticButton key={i} href={href}>
-                <span className="inline-flex w-11 h-11 items-center justify-center rounded-xl border border-accent-500/20 bg-dark-900 text-dark-400 hover:text-accent-400 hover:border-accent-500/40 transition-all duration-300">
-                  <Icon size={18} />
-                </span>
-              </MagneticButton>
-            ))}
+          {/* Action buttons + socials */}
+          <div className="flex flex-col gap-4 justify-center">
+            <MagneticButton href={CALENDLY_URL}>
+              <span className="flex items-center justify-center gap-2 w-full px-6 py-3.5 text-sm font-medium text-dark-950 bg-accent-500 rounded-xl hover:bg-accent-400 transition-all duration-300">
+                <Calendar size={18} />
+                Book Discovery Call
+              </span>
+            </MagneticButton>
+            <MagneticButton href="mailto:gojc31@gmail.com">
+              <span className="flex items-center justify-center gap-2 w-full px-6 py-3.5 text-sm font-medium text-dark-50 border border-accent-500/40 rounded-xl hover:bg-accent-500/10 transition-all duration-300">
+                <Send size={18} />
+                Send Email
+              </span>
+            </MagneticButton>
+
+            <div className="flex gap-4 justify-center mt-2">
+              {[
+                { icon: Linkedin, href: "#" },
+                { icon: Github, href: "#" },
+                { icon: Twitter, href: "#" },
+              ].map(({ icon: Icon, href }, i) => (
+                <MagneticButton key={i} href={href}>
+                  <span className="inline-flex w-11 h-11 items-center justify-center rounded-xl border border-accent-500/20 bg-dark-900 text-dark-400 hover:text-accent-400 hover:border-accent-500/40 transition-all duration-300">
+                    <Icon size={18} />
+                  </span>
+                </MagneticButton>
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>
