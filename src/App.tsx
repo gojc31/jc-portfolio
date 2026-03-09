@@ -1,6 +1,3 @@
-import { useState } from "react";
-import { AnimatePresence } from "framer-motion";
-import IntroAnimation from "./components/IntroAnimation";
 import MouseSpotlight from "./components/MouseSpotlight";
 import ParticleCanvas from "./components/ParticleCanvas";
 import { SectionDivider } from "./components/TechFrame";
@@ -20,17 +17,9 @@ import Footer from "./components/Footer";
 import AmbientOrbs from "./components/AmbientOrbs";
 
 function App() {
-  const [introComplete, setIntroComplete] = useState(false);
-
   return (
     <SoundProvider>
       <EasterEgg />
-      <AnimatePresence>
-        {!introComplete && (
-          <IntroAnimation onComplete={() => setIntroComplete(true)} />
-        )}
-      </AnimatePresence>
-
       <MouseSpotlight />
       <ParticleCanvas />
       <Navbar />
